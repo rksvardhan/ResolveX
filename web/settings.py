@@ -133,7 +133,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 
 # Gemini API Configuration
-GEMINI_API_KEY = 'AIzaSyANYxaSUCnrxb_PA-NJhPsNaHSbUwt2Rrw'
+GEMINI_API_KEY = ''
 
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'vineshreddy'  # add email address here
