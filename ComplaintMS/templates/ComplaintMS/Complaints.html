@@ -1,0 +1,337 @@
+{% extends "ComplaintMS/index.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Pending Complaints - Complaint Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-lg-3 col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-person-circle me-2"></i>
+                        Welcome, {{ user.username }}
+                    </h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                    </a>
+                    <a href="{% url 'change_password' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-key me-2"></i>Change Password
+                    </a>
+                    <a href="{% url 'complaints' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-plus-circle me-2"></i>Submit Complaint
+                    </a>
+                    <a href="{% url 'list' %}" class="list-group-item list-group-item-action active">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Pending Complaints
+                    </a>
+                    <a href="{% url 'slist' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-check-circle me-2"></i>Resolved Complaints
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-9 col-md-8">
+            <!-- Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <i class="bi bi-info-circle me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Page Header -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Pending Complaints
+                    </h4>
+                    <p class="text-muted mb-0">View and track your unresolved complaints with AI-powered priority</p>
+                </div>
+            </div>
+
+            <!-- Complaints Table -->
+            <div class="card">
+                <div class="card-body">
+                    {% if c %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Subject</th>
+                                        <th>Type</th>
+                                        <th>Priority</th>
+                                        <th>Description</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for complaint in c %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>
+                                            <strong>{{ complaint.Subject }}</strong>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary">{{ complaint.Type_of_complaint }}</span>
+                                        </td>
+                                        <td>
+                                            {% if complaint.priority == 'urgent' %}
+                                                <span class="badge bg-danger">
+                                                    <i class="bi bi-exclamation-triangle-fill me-1"></i>Urgent
+                                                </span>
+                                            {% elif complaint.priority == 'high' %}
+                                                <span class="badge bg-warning">
+                                                    <i class="bi bi-exclamation-circle me-1"></i>High
+                                                </span>
+                                            {% elif complaint.priority == 'medium' %}
+                                                <span class="badge bg-info">
+                                                    <i class="bi bi-info-circle me-1"></i>Medium
+                                                </span>
+                                            {% else %}
+                                                <span class="badge bg-success">
+                                                    <i class="bi bi-check-circle me-1"></i>Low
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <span class="text-muted">{{ complaint.Description|truncatechars:50 }}</span>
+                                        </td>
+                                        <td>
+                                            <small class="text-muted">{{ complaint.Time|date:"M d, Y" }}</small>
+                                        </td>
+                                        <td>
+                                            {% if complaint.status == 1 %}
+                                                <span class="badge bg-success">Solved</span>
+                                            {% elif complaint.status == 2 %}
+                                                <span class="badge bg-warning">In Progress</span>
+                                            {% else %}
+                                                <span class="badge bg-danger">Pending</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#complaintModal{{ complaint.id }}">
+                                                <i class="bi bi-eye me-1"></i>View
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- Modal for complaint details -->
+                                    <div class="modal fade" id="complaintModal{{ complaint.id }}" tabindex="-1" aria-labelledby="complaintModalLabel{{ complaint.id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="complaintModalLabel{{ complaint.id }}">Complaint Details</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <h6>Subject</h6>
+                                                            <p>{{ complaint.Subject }}</p>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <h6>Type</h6>
+                                                            <span class="badge bg-primary">{{ complaint.Type_of_complaint }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <h6>Priority</h6>
+                                                            {% if complaint.priority == 'urgent' %}
+                                                                <span class="badge bg-danger">
+                                                                    <i class="bi bi-exclamation-triangle-fill me-1"></i>Urgent
+                                                                </span>
+                                                            {% elif complaint.priority == 'high' %}
+                                                                <span class="badge bg-warning">
+                                                                    <i class="bi bi-exclamation-circle me-1"></i>High
+                                                                </span>
+                                                            {% elif complaint.priority == 'medium' %}
+                                                                <span class="badge bg-info">
+                                                                    <i class="bi bi-info-circle me-1"></i>Medium
+                                                                </span>
+                                                            {% else %}
+                                                                <span class="badge bg-success">
+                                                                    <i class="bi bi-check-circle me-1"></i>Low
+                                                                </span>
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <h6>Status</h6>
+                                                            {% if complaint.status == 1 %}
+                                                                <span class="badge bg-success">Solved</span>
+                                                            {% elif complaint.status == 2 %}
+                                                                <span class="badge bg-warning">In Progress</span>
+                                                            {% else %}
+                                                                <span class="badge bg-danger">Pending</span>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <h6>Description</h6>
+                                                            <p>{{ complaint.Description }}</p>
+                                                        </div>
+                                                    </div>
+                                                    {% if complaint.ai_analysis %}
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <h6>AI Analysis</h6>
+                                                            <div class="alert alert-info">
+                                                                <i class="bi bi-robot me-2"></i>
+                                                                {{ complaint.ai_analysis|truncatechars:200 }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <h6>Date Submitted</h6>
+                                                            <p>{{ complaint.Time|date:"F d, Y" }}</p>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <h6>Submitted By</h6>
+                                                            <p>{{ complaint.user.username }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a href="{% url 'download_complaint_pdf' complaint.id %}" class="btn btn-success">
+                                                        <i class="bi bi-download me-2"></i>Download PDF
+                                                    </a>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="bi bi-check-circle text-success" style="font-size: 4rem;"></i>
+                            <h4 class="mt-3 text-success">No Pending Complaints</h4>
+                            <p class="text-muted">Great! You don't have any unresolved complaints.</p>
+                            <a href="{% url 'complaints' %}" class="btn btn-primary">
+                                <i class="bi bi-plus-circle me-2"></i>Submit New Complaint
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .list-group-item {
+        border: none;
+        border-radius: var(--border-radius);
+        margin-bottom: 0.25rem;
+        transition: var(--transition);
+    }
+    
+    .list-group-item:hover {
+        background-color: var(--gray-100);
+        transform: translateX(5px);
+    }
+    
+    .list-group-item.active {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        border: none;
+    }
+    
+    .table {
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+    }
+    
+    .table thead th {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        color: white;
+        border: none;
+        font-weight: 600;
+        padding: 1rem;
+    }
+    
+    .table tbody tr {
+        transition: var(--transition);
+    }
+    
+    .table tbody tr:hover {
+        background-color: var(--gray-100);
+        transform: scale(1.01);
+    }
+    
+    .badge {
+        font-size: 0.75rem;
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .modal-content {
+        border-radius: var(--border-radius);
+        border: none;
+        box-shadow: var(--shadow-xl);
+    }
+    
+    .modal-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        color: white;
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+    }
+    
+    @media (max-width: 768px) {
+        .table-responsive {
+            font-size: 0.875rem;
+        }
+        
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add hover effects to table rows
+    const tableRows = document.querySelectorAll('.table tbody tr');
+    tableRows.forEach(row => {
+        row.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.01)';
+        });
+        
+        row.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+        });
+    });
+    
+    // Auto-hide alerts
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            alert.style.opacity = '0';
+            setTimeout(() => {
+                alert.remove();
+            }, 300);
+        }, 5000);
+    });
+});
+</script>
+{% endblock %}
+
+		

@@ -1,0 +1,92 @@
+/* Admin Content Alignment Fix for Laptop View */
+
+/* Target the main content area in admin pages */
+#content {
+    align-items: flex-start !important;
+    padding-top: 20px !important;
+}
+
+/* Ensure the changelist content is properly aligned */
+.change-list #changelist {
+    margin-top: 0 !important;
+}
+
+/* Fix for results table alignment */
+.results {
+    width: 100%;
+    margin-top: 0 !important;
+}
+
+/* Ensure filter sidebar is properly positioned */
+#changelist-filter {
+    position: relative;
+    top: 0 !important;
+}
+
+/* Ensure proper vertical alignment of content in admin pages */
+.dashboard .module,
+.change-list .module,
+.change-form .module {
+    margin-top: 0 !important;
+}
+
+/* Fix for object tools positioning */
+.object-tools {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* Ensure consistent spacing in all admin views */
+.app-ComplaintMS.model-complaint #content,
+.app-ComplaintMS.model-grievance #content,
+.app-ComplaintMS.model-profile #content,
+.app-auth.model-user #content,
+.app-auth.model-group #content,
+.app-sites.model-site #content,
+.app-account.model-emailaddress #content,
+.app-socialaccount.model-socialaccount #content,
+.app-socialaccount.model-socialtoken #content,
+.app-socialaccount.model-socialapp #content {
+    padding-top: 20px !important;
+}
+
+/* Ensure proper vertical alignment for all admin pages */
+.app-ComplaintMS.model-complaint .module,
+.app-ComplaintMS.model-grievance .module,
+.app-ComplaintMS.model-profile .module,
+.app-auth.model-user .module,
+.app-auth.model-group .module,
+.app-sites.model-site .module,
+.app-account.model-emailaddress .module,
+.app-socialaccount.model-socialaccount .module,
+.app-socialaccount.model-socialtoken .module,
+.app-socialaccount.model-socialapp .module {
+    margin-top: 0 !important;
+}
+
+/* Fix for specific admin pages */
+.change-list .filtered .results,
+.change-list .filtered .paginator,
+.filtered #toolbar,
+.filtered .actions,
+.filtered div.xfull {
+    margin-right: 0 !important;
+}
+
+/* Ensure content is at the top for laptop view */
+@media (min-width: 992px) {
+    #content {
+        align-content: flex-start !important;
+    }
+    
+    .results table {
+        margin-top: 0 !important;
+    }
+    
+    /* Fix for Django Suit specific alignment issues */
+    body.suit_layout_horizontal #content,
+    body.suit_layout_vertical #content {
+        align-items: flex-start !important;
+        align-content: flex-start !important;
+    }
+}

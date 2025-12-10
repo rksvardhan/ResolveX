@@ -1,0 +1,175 @@
+{% extends "ComplaintMS/index.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Login - Complaint Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center min-vh-100">
+        <div class="col-lg-5 col-md-7 col-sm-9">
+            <div class="card glass p-5">
+                <div class="text-center mb-4">
+                    <div class="mb-3">
+                        <i class="bi bi-shield-lock text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                    <h2 class="fw-bold text-dark mb-2">Welcome Back</h2>
+                    <p class="text-muted">Sign in to your account to continue</p>
+                </div>
+
+                <!-- Messages -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            <i class="bi bi-info-circle me-2"></i>
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <!-- Login Options -->
+                <div class="row g-3 mb-4">
+                    <div class="col-6">
+                        <a href="{% url 'signin' %}" class="card text-center p-3 text-decoration-none h-100">
+                            <div class="card-body">
+                                <i class="bi bi-person-circle text-primary mb-2" style="font-size: 2rem;"></i>
+                                <h6 class="card-title mb-0">Student/Staff</h6>
+                                <small class="text-muted">Login as Student or Staff</small>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="/admin/" class="card text-center p-3 text-decoration-none h-100">
+                            <div class="card-body">
+                                <i class="bi bi-gear text-warning mb-2" style="font-size: 2rem;"></i>
+                                <h6 class="card-title mb-0">Admin</h6>
+                                <small class="text-muted">Admin Panel Access</small>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="text-center mb-4">
+                    <span class="bg-white px-3 text-muted">or</span>
+                    <hr class="mt-n3">
+                </div>
+
+                <!-- Quick Links -->
+                <div class="text-center">
+                    <p class="text-muted mb-3">Don't have an account?</p>
+                    <div class="d-flex justify-content-center gap-2 flex-wrap">
+                        <a href="{% url 'register' %}" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-person-plus me-2"></i>Create Account
+                        </a>
+                        <a href="{% url 'password_reset' %}" class="btn btn-outline-secondary btn-sm">
+                            <i class="bi bi-question-circle me-2"></i>Forgot Password?
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Info -->
+            <div class="text-center mt-4">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center justify-content-center">
+                            <i class="bi bi-shield-check text-success me-2"></i>
+                            <small class="text-muted">Secure Login</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center justify-content-center">
+                            <i class="bi bi-clock text-info me-2"></i>
+                            <small class="text-muted">24/7 Access</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center justify-content-center">
+                            <i class="bi bi-headset text-warning me-2"></i>
+                            <small class="text-muted">Support Available</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: var(--transition);
+    }
+    
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-xl);
+    }
+    
+    .glass {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .btn-outline-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .btn-outline-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+    
+    @media (max-width: 768px) {
+        .card {
+            padding: 2rem !important;
+        }
+        
+        .display-4 {
+            font-size: 2rem;
+        }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add hover effects to login option cards
+    const loginCards = document.querySelectorAll('.card a');
+    loginCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-4px)';
+            this.style.boxShadow = 'var(--shadow-xl)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = 'var(--shadow)';
+        });
+    });
+    
+    // Add loading state to buttons
+    const buttons = document.querySelectorAll('.btn');
+    buttons.forEach(button => {
+        button.addEventListener('click', function() {
+            if (!this.classList.contains('btn-outline-primary') && !this.classList.contains('btn-outline-secondary')) {
+                this.innerHTML = '<i class="bi bi-arrow-clockwise me-2"></i>Loading...';
+                this.disabled = true;
+            }
+        });
+    });
+    
+    // Auto-hide alerts
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            alert.style.opacity = '0';
+            setTimeout(() => {
+                alert.remove();
+            }, 300);
+        }, 5000);
+    });
+});
+</script>
+{% endblock %}

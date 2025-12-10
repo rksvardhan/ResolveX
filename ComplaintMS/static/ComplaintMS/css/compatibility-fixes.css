@@ -1,0 +1,224 @@
+/* CSS Compatibility Fixes for Cross-Browser Support */
+
+/* General Text Color Fix - Ensure all text is visible */
+body, p, h1, h2, h3, h4, h5, h6, span, div, label, input, textarea, select {
+    color: #343A40 !important;
+}
+
+/* Backdrop Filter Support */
+.backdrop-filter {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+/* Text Size Adjust Support */
+.text-size-adjust {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+/* Text Align Match Parent Support */
+.text-align-match-parent {
+    -webkit-text-align: -webkit-match-parent;
+    text-align: match-parent;
+}
+
+/* Color Adjust Support */
+.color-adjust {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+}
+
+/* Input Autocapitalize Support */
+input[autocapitalize] {
+    /* Fallback for browsers that don't support autocapitalize */
+    text-transform: none;
+}
+
+/* Webkit Specific Fixes */
+@supports (-webkit-appearance: none) {
+    .webkit-specific {
+        -webkit-appearance: none;
+    }
+}
+
+/* Safari Specific Fixes */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    .safari-specific {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* Firefox Specific Fixes */
+@-moz-document url-prefix() {
+    .firefox-specific {
+        /* Firefox specific styles */
+    }
+}
+
+/* Edge Specific Fixes */
+@supports (-ms-ime-align: auto) {
+    .edge-specific {
+        /* Edge specific styles */
+    }
+}
+
+/* Chrome Specific Fixes */
+@media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm) {
+    .chrome-specific {
+        /* Chrome specific styles */
+    }
+}
+
+/* Form Control Enhancements */
+.form-control {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0.375rem;
+    border: 1px solid #d1d5db;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Button Enhancements */
+.btn {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    text-align: center;
+    transition: all 0.15s ease-in-out;
+    cursor: pointer;
+}
+
+/* Select Enhancements */
+select.form-select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+}
+
+/* Modal Enhancements */
+.modal {
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+}
+
+/* Card Enhancements */
+.card {
+    -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+}
+
+/* Badge Enhancements */
+.badge {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 500;
+    letter-spacing: 0.025em;
+}
+
+/* Table Enhancements */
+.table {
+    -webkit-border-radius: 0.5rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.table th {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 600;
+}
+
+/* Responsive Design Enhancements */
+@media (max-width: 768px) {
+    .container-fluid {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .table-responsive {
+        -webkit-overflow-scrolling: touch;
+        overflow-scrolling: touch;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .print-only {
+        display: block !important;
+    }
+    
+    body {
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
+    }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    .btn {
+        border-width: 2px;
+    }
+    
+    .form-control {
+        border-width: 2px;
+    }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        -webkit-animation-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        -webkit-animation-iteration-count: 1 !important;
+        animation-iteration-count: 1 !important;
+        -webkit-transition-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .auto-dark {
+        background-color: #1f2937;
+        color: #f9fafb;
+    }
+    
+    .auto-dark .form-control {
+        background-color: #374151;
+        border-color: #4b5563;
+        color: #f9fafb;
+    }
+    
+    .auto-dark .btn {
+        background-color: #374151;
+        border-color: #4b5563;
+        color: #f9fafb;
+    }
+} 

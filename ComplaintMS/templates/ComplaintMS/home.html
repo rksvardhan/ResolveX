@@ -1,0 +1,278 @@
+{% extends "ComplaintMS/index.html" %}
+
+{% block title %}Home - Complaint Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Hero Section -->
+    <div class="row align-items-center min-vh-100" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);">
+        <div class="col-lg-8 mx-auto text-center">
+            <div class="card glass p-5 mb-5">
+                <h1 class="display-4 fw-bold text-primary mb-4">
+                    <i class="bi bi-shield-check text-primary me-3"></i>
+                    Complaint Management System
+                </h1>
+                <p class="lead text-muted mb-5">
+                    Streamline your complaint resolution process with our modern, efficient platform. 
+                    Submit, track, and resolve complaints with ease.
+                </p>
+                
+                {% if not user.is_authenticated %}
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="{% url 'register' %}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-person-plus me-2"></i>Get Started
+                    </a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                    </a>
+                </div>
+                {% else %}
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    {% if user.profile.type_user == 'student' %}
+                        <a href="{% url 'dashboard' %}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-person-circle me-2"></i>Go to Dashboard
+                        </a>
+                    {% elif user.profile.type_user == 'grievance' %}
+                        <a href="{% url 'allcomplaints' %}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-gear me-2"></i>Admin Panel
+                        </a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row py-5">
+        <div class="col-12 text-center mb-5">
+            <h2 class="display-5 fw-bold text-dark mb-3">Why Choose Our Platform?</h2>
+            <p class="lead text-muted">Experience the difference with our comprehensive complaint management solution</p>
+        </div>
+        
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100 text-center p-4">
+                <div class="card-body">
+                    <div class="feature-icon mb-4">
+                        <i class="bi bi-clipboard-data text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                    <h4 class="card-title fw-bold mb-3">Submit Complaints</h4>
+                    <p class="card-text text-muted">
+                        Easily submit and track your complaints through our intuitive interface. 
+                        Get real-time updates on your complaint status.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100 text-center p-4">
+                <div class="card-body">
+                    <div class="feature-icon mb-4">
+                        <i class="bi bi-check-circle text-success" style="font-size: 3rem;"></i>
+                    </div>
+                    <h4 class="card-title fw-bold mb-3">Resolve Issues</h4>
+                    <p class="card-text text-muted">
+                        Efficient complaint resolution system with automated workflows 
+                        and priority-based handling for faster resolution times.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100 text-center p-4">
+                <div class="card-body">
+                    <div class="feature-icon mb-4">
+                        <i class="bi bi-graph-up text-warning" style="font-size: 3rem;"></i>
+                    </div>
+                    <h4 class="card-title fw-bold mb-3">Analytics & Reports</h4>
+                    <p class="card-text text-muted">
+                        Comprehensive analytics and reporting tools to track complaint trends, 
+                        resolution times, and system performance metrics.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Section -->
+    <div class="row py-5" style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);">
+        <div class="col-12 text-center mb-5">
+            <h2 class="display-5 fw-bold text-white mb-3">Platform Statistics</h2>
+            <p class="lead text-white-50">See how our platform is making a difference</p>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card text-center p-4 glass">
+                <div class="card-body">
+                    <h3 class="display-6 fw-bold text-primary mb-2">1000+</h3>
+                    <p class="text-muted mb-0">Complaints Resolved</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card text-center p-4 glass">
+                <div class="card-body">
+                    <h3 class="display-6 fw-bold text-success mb-2">95%</h3>
+                    <p class="text-muted mb-0">Satisfaction Rate</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card text-center p-4 glass">
+                <div class="card-body">
+                    <h3 class="display-6 fw-bold text-warning mb-2">24h</h3>
+                    <p class="text-muted mb-0">Average Response Time</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card text-center p-4 glass">
+                <div class="card-body">
+                    <h3 class="display-6 fw-bold text-info mb-2">500+</h3>
+                    <p class="text-muted mb-0">Active Users</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <div class="row py-5">
+        <div class="col-12 text-center mb-5">
+            <h2 class="display-5 fw-bold text-dark mb-3">How It Works</h2>
+            <p class="lead text-muted">Simple steps to get your complaints resolved</p>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card text-center p-4 h-100">
+                <div class="card-body">
+                    <div class="step-number mb-3">
+                        <span class="badge bg-primary rounded-circle p-3" style="font-size: 1.5rem;">1</span>
+                    </div>
+                    <h5 class="card-title fw-bold mb-3">Submit Complaint</h5>
+                    <p class="card-text text-muted">
+                        Fill out the complaint form with all necessary details and submit it through our platform.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card text-center p-4 h-100">
+                <div class="card-body">
+                    <div class="step-number mb-3">
+                        <span class="badge bg-primary rounded-circle p-3" style="font-size: 1.5rem;">2</span>
+                    </div>
+                    <h5 class="card-title fw-bold mb-3">Review Process</h5>
+                    <p class="card-text text-muted">
+                        Your complaint is reviewed by our grievance team and assigned to the appropriate department.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card text-center p-4 h-100">
+                <div class="card-body">
+                    <div class="step-number mb-3">
+                        <span class="badge bg-primary rounded-circle p-3" style="font-size: 1.5rem;">3</span>
+                    </div>
+                    <h5 class="card-title fw-bold mb-3">Resolution</h5>
+                    <p class="card-text text-muted">
+                        The issue is addressed and resolved by our team with regular updates on progress.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card text-center p-4 h-100">
+                <div class="card-body">
+                    <div class="step-number mb-3">
+                        <span class="badge bg-primary rounded-circle p-3" style="font-size: 1.5rem;">4</span>
+                    </div>
+                    <h5 class="card-title fw-bold mb-3">Confirmation</h5>
+                    <p class="card-text text-muted">
+                        Receive confirmation of resolution and provide feedback on the service quality.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action Section -->
+    <div class="row py-5" style="background: linear-gradient(135deg, var(--gray-100) 0%, var(--gray-200) 100%);">
+        <div class="col-lg-8 mx-auto text-center">
+            <h2 class="display-5 fw-bold text-dark mb-4">Ready to Get Started?</h2>
+            <p class="lead text-muted mb-5">
+                Join thousands of users who trust our platform for efficient complaint management.
+            </p>
+            
+            {% if not user.is_authenticated %}
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <a href="{% url 'register' %}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-person-plus me-2"></i>Create Account
+                </a>
+                <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                </a>
+            </div>
+            {% else %}
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                {% if user.profile.type_user == 'student' %}
+                    <a href="{% url 'dashboard' %}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-person-circle me-2"></i>Access Dashboard
+                    </a>
+                {% elif user.profile.type_user == 'grievance' %}
+                    <a href="{% url 'allcomplaints' %}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-gear me-2"></i>Admin Panel
+                    </a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .feature-icon {
+        transition: var(--transition);
+    }
+    
+    .card:hover .feature-icon {
+        transform: scale(1.1);
+    }
+    
+    .step-number {
+        transition: var(--transition);
+    }
+    
+    .card:hover .step-number {
+        transform: scale(1.1);
+    }
+    
+    .glass {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    @media (max-width: 768px) {
+        .display-4 {
+            font-size: 2rem;
+        }
+        
+        .display-5 {
+            font-size: 1.75rem;
+        }
+        
+        .display-6 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}

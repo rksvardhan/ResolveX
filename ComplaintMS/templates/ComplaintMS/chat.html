@@ -1,0 +1,395 @@
+{% extends "ComplaintMS/index.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}AI Chat Assistant - Complaint Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-lg-3 col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-person-circle me-2"></i>
+                        Welcome, {{ user.username }}
+                    </h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                    </a>
+                    <a href="{% url 'change_password' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-key me-2"></i>Change Password
+                    </a>
+                    <a href="{% url 'complaints' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-plus-circle me-2"></i>Submit Complaint
+                    </a>
+                    <a href="{% url 'list' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Pending Complaints
+                    </a>
+                    <a href="{% url 'slist' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-check-circle me-2"></i>Resolved Complaints
+                    </a>
+                    <a href="{% url 'chat' %}" class="list-group-item list-group-item-action active">
+                        <i class="bi bi-chat-dots me-2"></i>AI Assistant
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-9 col-md-8">
+            <!-- Chat Interface -->
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="bi bi-robot me-2"></i>AI Complaint Assistant
+                    </h4>
+                    <p class="text-muted mb-0">Ask me anything about complaints, get help, or analyze your complaint</p>
+                </div>
+                <div class="card-body">
+                    <!-- Chat Messages -->
+                    <div id="chat-messages" class="chat-container mb-3">
+                        <!-- Welcome Message -->
+                        <div class="message bot-message">
+                            <div class="message-content">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-robot text-primary me-2"></i>
+                                    <strong>AI Assistant</strong>
+                                </div>
+                                <p class="mb-0">Hello! I'm your AI assistant for the Complaint Management System. I can help you with:</p>
+                                <ul class="mb-0 mt-2">
+                                    <li>Analyzing complaint priorities</li>
+                                    <li>Providing guidance on complaint submission</li>
+                                    <li>Explaining complaint types and procedures</li>
+                                    <li>Answering questions about the system</li>
+                                </ul>
+                                <p class="mb-0 mt-2">How can I help you today?</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Input -->
+                    <div class="chat-input-container">
+                        <form id="chat-form" method="post">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <input type="text" id="user-input" name="prompt" class="form-control" 
+                                       placeholder="Type your message here..." required>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-send"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="quick-actions mt-3">
+                        <h6 class="text-muted mb-2">Quick Actions:</h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button class="btn btn-outline-primary btn-sm quick-action" data-action="analyze">
+                                <i class="bi bi-search me-1"></i>Analyze Complaint
+                            </button>
+                            <button class="btn btn-outline-info btn-sm quick-action" data-action="help">
+                                <i class="bi bi-question-circle me-1"></i>Get Help
+                            </button>
+                            <button class="btn btn-outline-success btn-sm quick-action" data-action="types">
+                                <i class="bi bi-tags me-1"></i>Complaint Types
+                            </button>
+                            <button class="btn btn-outline-warning btn-sm quick-action" data-action="priority">
+                                <i class="bi bi-exclamation-triangle me-1"></i>Priority Guide
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Analysis Results -->
+            {% if response %}
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-lightbulb me-2"></i>AI Analysis
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="bi bi-robot me-2"></i>
+                        <strong>AI Response:</strong>
+                        <p class="mb-0 mt-2">{{ response }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .list-group-item {
+        border: none;
+        border-radius: var(--border-radius);
+        margin-bottom: 0.25rem;
+        transition: var(--transition);
+    }
+    
+    .list-group-item:hover {
+        background-color: var(--gray-100);
+        transform: translateX(5px);
+    }
+    
+    .list-group-item.active {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        border: none;
+    }
+    
+    .chat-container {
+        height: 400px;
+        overflow-y: auto;
+        border: 1px solid var(--gray-200);
+        border-radius: var(--border-radius);
+        padding: 1rem;
+        background: var(--gray-50);
+    }
+    
+    .message {
+        margin-bottom: 1rem;
+        display: flex;
+    }
+    
+    .user-message {
+        justify-content: flex-end;
+    }
+    
+    .bot-message {
+        justify-content: flex-start;
+    }
+    
+    .message-content {
+        max-width: 70%;
+        padding: 0.75rem 1rem;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+    }
+    
+    .user-message .message-content {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        color: white;
+    }
+    
+    .bot-message .message-content {
+        background: white;
+        border: 1px solid var(--gray-200);
+    }
+    
+    .chat-input-container {
+        border-top: 1px solid var(--gray-200);
+        padding-top: 1rem;
+    }
+    
+    .quick-actions {
+        border-top: 1px solid var(--gray-200);
+        padding-top: 1rem;
+    }
+    
+    .quick-action {
+        transition: var(--transition);
+    }
+    
+    .quick-action:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow);
+    }
+    
+    .typing-indicator {
+        display: none;
+        padding: 0.5rem 1rem;
+        background: white;
+        border-radius: var(--border-radius);
+        border: 1px solid var(--gray-200);
+        margin-bottom: 1rem;
+    }
+    
+    .typing-dots {
+        display: inline-block;
+    }
+    
+    .typing-dots span {
+        animation: typing 1.4s infinite ease-in-out;
+        display: inline-block;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: var(--gray-500);
+        margin: 0 2px;
+    }
+    
+    .typing-dots span:nth-child(1) { animation-delay: 0s; }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    
+    @keyframes typing {
+        0%, 60%, 100% { transform: translateY(0); }
+        30% { transform: translateY(-10px); }
+    }
+    
+    @media (max-width: 768px) {
+        .chat-container {
+            height: 300px;
+        }
+        
+        .message-content {
+            max-width: 85%;
+        }
+        
+        .quick-actions .btn {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+        }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chatForm = document.getElementById('chat-form');
+    const userInput = document.getElementById('user-input');
+    const chatMessages = document.getElementById('chat-messages');
+    const quickActions = document.querySelectorAll('.quick-action');
+    
+    // Quick action handlers
+    quickActions.forEach(button => {
+        button.addEventListener('click', function() {
+            const action = this.dataset.action;
+            let message = '';
+            
+            switch(action) {
+                case 'analyze':
+                    message = 'How can I help you analyze your complaint? Please provide the subject and description.';
+                    break;
+                case 'help':
+                    message = 'I can help you with complaint submission, priority analysis, and system navigation. What specific help do you need?';
+                    break;
+                case 'types':
+                    message = 'The complaint types available are: ClassRoom, Teacher, Management, College, and Other. Which type would you like to know more about?';
+                    break;
+                case 'priority':
+                    message = 'Complaints are automatically prioritized as: Urgent (safety/security), High (academic impact), Medium (general issues), Low (minor concerns).';
+                    break;
+            }
+            
+            addBotMessage(message);
+        });
+    });
+    
+    // Chat form submission
+    chatForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const userMessage = userInput.value.trim();
+        if (!userMessage) return;
+        
+        // Add user message
+        addUserMessage(userMessage);
+        
+        // Show typing indicator
+        showTypingIndicator();
+        
+        // Simulate AI response (in real implementation, this would call your AI service)
+        setTimeout(() => {
+            hideTypingIndicator();
+            const aiResponse = generateAIResponse(userMessage);
+            addBotMessage(aiResponse);
+        }, 1500);
+        
+        userInput.value = '';
+    });
+    
+    function addUserMessage(message) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message user-message';
+        messageDiv.innerHTML = `
+            <div class="message-content">
+                <div class="d-flex align-items-center mb-2">
+                    <i class="bi bi-person text-white me-2"></i>
+                    <strong>You</strong>
+                </div>
+                <p class="mb-0">${message}</p>
+            </div>
+        `;
+        chatMessages.appendChild(messageDiv);
+        scrollToBottom();
+    }
+    
+    function addBotMessage(message) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message bot-message';
+        messageDiv.innerHTML = `
+            <div class="message-content">
+                <div class="d-flex align-items-center mb-2">
+                    <i class="bi bi-robot text-primary me-2"></i>
+                    <strong>AI Assistant</strong>
+                </div>
+                <p class="mb-0">${message}</p>
+            </div>
+        `;
+        chatMessages.appendChild(messageDiv);
+        scrollToBottom();
+    }
+    
+    function showTypingIndicator() {
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'message bot-message typing-indicator';
+        typingDiv.id = 'typing-indicator';
+        typingDiv.innerHTML = `
+            <div class="message-content">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-robot text-primary me-2"></i>
+                    <strong>AI Assistant</strong>
+                    <div class="typing-dots ms-2">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        `;
+        chatMessages.appendChild(typingDiv);
+        scrollToBottom();
+    }
+    
+    function hideTypingIndicator() {
+        const typingIndicator = document.getElementById('typing-indicator');
+        if (typingIndicator) {
+            typingIndicator.remove();
+        }
+    }
+    
+    function scrollToBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    function generateAIResponse(userMessage) {
+        const message = userMessage.toLowerCase();
+        
+        if (message.includes('priority') || message.includes('urgent') || message.includes('high')) {
+            return 'Complaints are automatically prioritized using AI analysis. Urgent complaints (safety/security issues) are marked in red, high priority (academic impact) in orange, medium (general issues) in blue, and low priority (minor concerns) in green.';
+        } else if (message.includes('type') || message.includes('category')) {
+            return 'Available complaint types: ClassRoom (facility issues), Teacher (academic concerns), Management (administrative), College (institutional), and Other (miscellaneous). Choose the most appropriate type for your issue.';
+        } else if (message.includes('submit') || message.includes('file')) {
+            return 'To submit a complaint: 1) Go to "Submit Complaint" 2) Fill in subject and description 3) Select complaint type 4) Submit - AI will automatically analyze and assign priority.';
+        } else if (message.includes('help') || message.includes('assist')) {
+            return 'I can help you with complaint submission, priority analysis, system navigation, and answering questions about the complaint management process. What specific assistance do you need?';
+        } else if (message.includes('analyze') || message.includes('review')) {
+            return 'I can analyze your complaint content to suggest priority levels. Please provide the subject and description of your complaint for analysis.';
+        } else {
+            return 'I understand you\'re asking about "' + userMessage + '". I can help with complaint submission, priority analysis, system navigation, and general questions. Could you please be more specific about what you need help with?';
+        }
+    }
+    
+    // Auto-focus on input
+    userInput.focus();
+});
+</script>
+{% endblock %}

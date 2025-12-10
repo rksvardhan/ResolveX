@@ -1,0 +1,118 @@
+/* 
+ * Custom CSS to fix content alignment in Django admin for laptop view
+ * This file addresses alignment issues in the admin interface
+ */
+
+/* Main content area alignment - fixing conflicting padding rules */
+#content {
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    padding: 1.5rem 1.875rem !important; /* Ensure consistent padding */
+    align-content: flex-start !important; /* Fix the conflicting align-content */
+}
+
+/* Changelist container alignment */
+#changelist {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    width: 100% !important; /* Ensure full width */
+}
+
+/* Ensure filter sidebar stays at the top */
+#changelist #changelist-filter {
+    position: relative !important;
+    top: 0 !important;
+    margin-top: 0 !important;
+    float: none !important; /* Prevent floating which can cause empty columns */
+}
+
+/* Remove empty columns that override the main column */
+#changelist.filtered #changelist-filter:empty {
+    display: none !important;
+    width: 0 !important;
+}
+
+/* Ensure results table aligns properly */
+#changelist #changelist-form {
+    margin-top: 0 !important;
+}
+
+/* Fix object tools positioning */
+#content-main > .object-tools {
+    margin-bottom: 1.5rem !important;
+    margin-top: 0 !important;
+}
+
+/* Ensure consistent spacing in all admin pages */
+body.change-list #content-main,
+body.change-form #content-main {
+    margin-top: 1rem !important;
+}
+
+/* Fix vertical alignment in all admin model pages */
+.module {
+    margin-top: 0 !important;
+}
+
+/* Ensure proper spacing between elements */
+.form-row {
+    padding-top: 0.5rem !important;
+}
+
+/* Fix flex growth inconsistency */
+body.suit_layout_vertical:not(.login) #container #content {
+    flex: 1 0 auto !important; /* Use flex-grow: 1, flex-shrink: 0, flex-basis: auto */
+}
+
+/* Ensure container has proper flex context */
+body.suit_layout_vertical:not(.login) #container {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100vh !important;
+}
+
+/* Remove sticky behavior from nav-sidebar */
+#nav-sidebar {
+    position: relative !important;
+    max-height: none !important;
+    top: auto !important;
+    height: auto !important;
+    overflow-y: visible !important;
+}
+
+/* Ensure toggle button is properly positioned */
+.toggle-nav-sidebar {
+    position: relative !important;
+    top: auto !important;
+}
+
+/* Override any sticky class that might be applied */
+.sticky {
+    position: relative !important;
+    top: auto !important;
+    max-height: none !important;
+}
+
+/* Ensure proper alignment for dashboard modules */
+.dashboard .module {
+    align-self: flex-start !important;
+}
+
+/* Media query for laptop screens */
+@media (min-width: 992px) and (max-width: 1366px) {
+    /* Additional laptop-specific adjustments */
+    #content {
+        padding-top: 1rem !important;
+    }
+    
+    /* Ensure filter sidebar stays properly aligned */
+    #changelist.filtered #changelist-filter:not(:empty) {
+        align-self: flex-start !important;
+    }
+    
+    /* Ensure proper spacing between elements */
+    #changelist #toolbar {
+        margin-bottom: 1rem !important;
+    }
+}
